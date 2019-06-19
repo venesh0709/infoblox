@@ -2,21 +2,28 @@
 - name: Nios_Host_Record
   hosts: localhost
   connection: local
+  roles:
+    - syncrou.manageiq-automate
   vars_files: /vars/host.yaml
   tasks:
-  - name: "Get $evm.root['ip_addr']"
+  - name: "Get Attributes"
     manageiq_automate:
       workspace: "{{ workspace }}"
-      get_attribute:
-        object: "root"
-        attribute: "ip_addr"
-    register: vm_name 
-  - name: Create Nios Host_Record
+      get_state_var:
+        attribute: ip_addr
+    register: ip_addr
+  - debug:
+      msg: "First item: {{ ip_addr['value'][0] }}"
+  - debug:
+      var: hostname
+  - debug:
+      var: zone
+  - name: Create NIOS record
     nios_host_record:
-      name: new_host.ansible.com
+      name: "{{ hostname }}.{{ zone }}"
       ipv4:
-      - address: "{{ ip_addr }}"
+      - address: "{{ ip_addr['value'][0] }}"
       state: present
-      comment: test comment
+      comment: ip address added
       provider: "{{ nios_provider }}"                                 
     register: host_created
