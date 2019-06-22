@@ -1,0 +1,24 @@
+---
+- hosts: all
+  gather_facts: false
+  tasks:
+  - name: Cleaning up yum.
+    command: yum clean all
+    ignore_errors: yes  
+  - name: Unregister subscription-manager.
+    command: subscription-manager unregister
+    ignore_errors: yes  
+  - name: Subscription Manager cleanup
+    command: subscription-manager clean
+    ignore_errors: yes        
+  - name: Download and instal katello agent.
+    yum:
+      name: http://vxrsatmgt01.tpt01.rdu.bcbsnc.com/pub/katello-ca-consumer-latest.noarch.rpm
+      state: present
+      use_backend: yum  
+  - name: Register to Satellite6
+    redhat_subscription:
+      state: present
+      activationkey: '{{ host_environment }}'
+      org_id: Blue_Cross_Blue_Shield_of_NC
+    register: reg_return
