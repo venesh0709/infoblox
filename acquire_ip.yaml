@@ -11,6 +11,8 @@
     register: cidr
   - debug:
       var: hostname
+  - debug:
+      var: gateway
   - name: Get Next Available IP
     set_fact:
       ipaddr: "{{ lookup('nios_next_ip', cidr , provider=nios_provider) }}"
@@ -48,4 +50,4 @@
       workspace: "{{ workspace }}"     
   vars: 
     - netmask: "255.255.255.0"
-    - gateway: "192.168.10.1"
+   
