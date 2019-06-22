@@ -50,4 +50,3 @@
       workspace: "{{ workspace }}"     
   vars: 
     - netmask: "255.255.255.0"
-   
