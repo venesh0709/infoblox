@@ -1,0 +1,22 @@
+---
+- name: Nios_Host_Record
+  hosts: localhost
+  connection: local
+  vars_prompt:
+    - name: fqdn
+      prompt: FQDN?
+      private: no
+    - name: ip
+      prompt: IP?
+      private: no
+  vars_files:
+    - /vars/ib.yml
+  tasks:
+   - name: Create Nios Host Record
+     nios_host_record:
+      name: "{{ fqdn }}"
+      ipv4:
+      - address: "{{ ip }}"
+      state: absent
+      comment: Deleted
+      provider: "{{ nios_provider }}"
