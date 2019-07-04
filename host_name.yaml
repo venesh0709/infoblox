@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  tasks:
+  - name: Change the hostname
+    command:
+       "hostnamectl set-hostname {{ hostname }}.{{ zone }}"
+  - name: restart the hostname daemon
+    command:
+       "systemctl restart systemd-hostnamed"
